@@ -1,0 +1,34 @@
+Fs = 10000;                % Sampling frequency (Hz)
+Fc = 1000;                 % Carrier frequency (Hz)
+Fm = 100;                  % Message signal frequency (Hz)
+Ac = 1;                    % Carrier amplitude
+Am = 0.5;                  % Message amplitude
+T = 1;                     % Signal duration (seconds)
+t = 0:1/Fs:T-1/Fs;         % Time vector
+
+message_signal = Am * cos(2 * pi * Fm * t);
+carrier_signal = Ac * cos(2 * pi * Fc * t);
+
+modulated_signal = (Ac + message_signal) .* carrier_signal;
+demodulated_signal = abs(hilbert(modulated_signal));  % Envelope extraction
+
+subplot(3,1,1);
+plot(t, message_signal);
+title('Message Signal (m(t))');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+subplot(3,1,2);
+plot(t, modulated_signal);
+title('Modulated Signal (AM)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+subplot(3,1,3);
+plot(t, demodulated_signal);
+title('Demodulated Signal (Envelope Detection)');
+xlabel('Time (s)');
+ylabel('Amplitude');
+
+% Play sound of the message signal
+sound(message_signal, Fs);
