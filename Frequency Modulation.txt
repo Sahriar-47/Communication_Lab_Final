@@ -1,0 +1,26 @@
+Fs = 10000;
+Fc = 1000;
+Fm = 100;
+Ac = 1;
+kf = 50;				%frequency deviation constant
+T = 1;
+t = 0:1/Fs:T-1/Fs;
+message_signal = cos(2 * pi * Fm * t);
+carrier_signal = Ac*cos(2*pi*Fc*t);
+modulated_signal = Ac * cos(2 * pi * Fc * t + kf * cumsum(message_signal)/Fs);
+
+% Demodulation using differentiation
+demodulated_signal = [diff(unwrap(angle(hilbert(modulated_signal)))) 0];
+
+figure;
+subplot(3,1,1),
+plot(t, message_signal),
+title('Message Signal');
+
+subplot(3,1,2),
+plot(t, modulated_signal),
+title('Frequency Modulated Signal');
+
+subplot(3,1,3),
+plot(t, demodulated_signal),
+title('Demodulated Signal');
